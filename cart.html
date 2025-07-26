@@ -61,13 +61,11 @@
             fetch('https://edu-me01.github.io/Json-Data/Real-state.json')
                 .then(response => response.json())
                 .then(data => {
-                    // data.properties is the array of all properties
-                    // cart is an array of ids (from localStorage)
+ 
                     cart = cart.map(cartId => {
                         return data.properties.find(p => p.id === cartId) || {};
                     });
-                    // After updating cart, continue rendering as below
-                    let total = 0;
+                     let total = 0;
                     cartContainer.innerHTML = '';
                     cart.forEach(item => {
                         const card = document.createElement('div');
@@ -89,8 +87,7 @@
                         if (item.price) total += Number(item.price);
                     });
 
-                    // Total and checkout button
-                    const summary = document.createElement('div');
+                     const summary = document.createElement('div');
                     summary.style = 'width:100%; text-align:center; margin-top:30px;';
                     summary.innerHTML = `
                         <h4 style="color:#222;">Total: $${total.toFixed(2)}</h4>
@@ -98,8 +95,7 @@
                     cartContainer.parentNode.appendChild(summary);
                 })
                 .catch(err => {
-                    // If fetch fails, keep cart as is
-                    console.error('Failed to fetch properties:', err);
+                     console.error('Failed to fetch properties:', err);
                 });
                 let total = 0;
                 cartContainer.innerHTML = '';
@@ -119,8 +115,7 @@
                     if (item.price) total += Number(item.price);
                 });
 
-                // Total and checkout button
-                const summary = document.createElement('div');
+                 const summary = document.createElement('div');
                 summary.style = 'width:100%; text-align:center; margin-top:30px;';
                 summary.innerHTML = `
                     <h4 style="color:#222;">Total: $${total.toFixed(2)}</h4>
