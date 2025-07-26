@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elfajar Estates</title>  
+    <link rel="stylesheet" href="style.css">  
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <nav id="navbar">
+        <h4>
+            Elfajar Estates
+        </h4>
+        <ul>
+            <li><a   href="index.html">home</a></li>
+            <li><a href="products.html">properties</a></li>
+            <li><a href="contact.html">contact us</a></li>
+            <li><a class="active" href="cart.html">
+
+                    cart
+                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M284.53-80.67q-30.86 0-52.7-21.97Q210-124.62 210-155.47q0-30.86 21.98-52.7Q253.95-230 284.81-230t52.69 21.98q21.83 21.97 21.83 52.83t-21.97 52.69q-21.98 21.83-52.83 21.83Zm400 0q-30.86 0-52.7-21.97Q610-124.62 610-155.47q0-30.86 21.98-52.7Q653.95-230 684.81-230t52.69 21.98q21.83 21.97 21.83 52.83t-21.97 52.69q-21.98 21.83-52.83 21.83ZM238.67-734 344-515.33h285.33l120-218.67H238.67ZM206-800.67h589.38q22.98 0 34.97 20.84 11.98 20.83.32 41.83L693.33-490.67q-11 19.34-28.87 30.67-17.87 11.33-39.13 11.33H324l-52 96h487.33V-286H278q-43 0-63-31.83-20-31.84-.33-68.17l60.66-111.33-149.33-316H47.33V-880h121.34L206-800.67Zm138 285.34h285.33H344Z"/></svg>
+                </a></li>
+                 <li>
+                <a href="login.html"
+                    style="background-color: #222; border: 2px solid #eb6650; color: #eb6650; padding: 8px 22px; border-radius: 6px; font-weight: 600; margin-left: 18px; transition: background 0.2s, color 0.2s;">
+                    Login/Register
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container" style="max-width: 420px; margin: 60px auto 40px auto; background: #fff; padding: 32px 28px; border-radius: 10px; box-shadow: 0 2px 16px rgba(0,0,0,0.08);">
+        <h2 style="text-align:center; color:#eb6650; margin-bottom: 24px;">Register</h2>
+        <form id="registerForm">
+            <div class="mb-3">
+                <label for="fullname" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="fullname" placeholder="Enter your full name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Create a password" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirm-password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirm-password" placeholder="Confirm your password" required>
+            </div>
+            <button type="submit" class="btn" style="width:100%; background:#eb6650; color:#fff; font-weight:600; border:none; border-radius:6px; padding:10px 0; margin-top:10px;">Register</button>
+            <div style="text-align:center; margin-top:18px;">
+                <span style="font-size:15px;">Already have an account? <a href="login.html" style="color:#eb6650;">Login</a></span>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fullname = document.getElementById('fullname').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            localStorage.setItem('fullname', fullname);
+            localStorage.setItem('isLoggedIn', 'true');
+            window.location.href = 'index.html';
+        });
+    </script>
+  <footer style="width: 100%; background-color: #222; color: #fff; padding: 40px 0 20px 0; margin-top: 40px;">
+        <div style="max-width: 1050px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;">
+            <div style="flex: 1; min-width: 220px; margin-bottom: 20px;">
+                <h4 style="color: #eb6650;">Elfajar Estates</h4>
+                <p style="font-size: 15px; color: #ccc;">Your trusted partner for quality properties and effortless rentals. Find your dream home with us today.</p>
+            </div>
+            <div style="flex: 1; min-width: 180px; margin-bottom: 20px;">
+                <h5 style="color: #eb6650;">Quick Links</h5>
+                <ul style="list-style: none; padding: 0; color: #ccc;">
+                    <li><a href="index.html" style="color: #ccc; text-decoration: none;">Home</a></li>
+                    <li><a href="products.html" style="color: #ccc; text-decoration: none;">Properties</a></li>
+                    <li><a href="contact.html" style="color: #ccc; text-decoration: none;">Contact Us</a></li>
+                    <li><a href="cart.html" style="color: #ccc; text-decoration: none;">Cart</a></li>
+                </ul>
+            </div>
+            <div style="flex: 1; min-width: 220px; margin-bottom: 20px;">
+                <h5 style="color: #eb6650;">Contact</h5>
+                <p style="font-size: 15px; color: #ccc; margin-bottom: 8px;">123 Main Street, City, Country</p>
+                <p style="font-size: 15px; color: #ccc; margin-bottom: 8px;">Phone: (123) 456-7890</p>
+                <p style="font-size: 15px; color: #ccc;">Email: info@elfajarestates.com</p>
+            </div>
+        </div>
+        <div style="text-align: center; color: #888; font-size: 14px; margin-top: 30px;">
+            &copy; 2025 Elfajar Estates. All rights reserved.
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

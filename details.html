@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elfajar Estates</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        let id = Number(localStorage.getItem("property"));
+        fetch(`https://edu-me01.github.io/Json-Data/Real-state.json`)
+            .then(res => res.json())
+            .then(data => {
+                let propertys = data.properties;
+                let property = propertys.find(p => p.id === id);
+                // Build amenities string
+                let amenitiesText = "";
+                for (let i = 0; i < property.amenities.length; i++) {
+                    amenitiesText += `${property.amenities[i]}${i < property.amenities.length - 1 ? ', ' : ''}`;
+                }
+                let page = document.getElementById("p");
+                page.innerHTML = `
+                
+                <img src="${property.images[0]}" alt="${property.title}" style=" border-radius: 20px; width: 650px;" onerror="this.onerror=null;this.src='https://img.freepik.com/premium-vector/home-icon-vector_564384-123.jpg';href="${property.images[0]}">
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <img src="${property.images[1]}" alt="${property.title}" style=" border-radius: 20px;width: 315px;">
+                    <img src="${property.images[2]}" alt="${property.title}" style=" border-radius: 20px; width: 315px;">
+                    </div>
+                `
+                let dis = document.createElement("div");
+                dis.style.background = "#fff";
+                dis.style.padding = "32px";
+                dis.style.margin = "40px auto";
+                dis.style.borderRadius = "18px";
+                dis.style.boxShadow = "0 4px 24px rgba(0,0,0,0.09)";
+                dis.style.maxWidth = "700px";
+                dis.style.border = "none";
+                dis.innerHTML = `
+                    <h2 style="color: #eb6650; margin-bottom: 12px; font-size: 2rem; font-weight: 700; display: flex; align-items: center;">
+                        <span style="vertical-align: middle; margin-right: 8px; display: flex; align-items: center;">
+                            <svg width="28" height="28" fill="#eb6650" viewBox="0 0 24 24"><path d="M12 3l10 9h-3v9h-6v-6h-2v6H5v-9H2z"/></svg>
+                        </span>
+                        ${property.title}
+                        <button onclick="addToFavourites(${property.id})" style="background: none; border: none; cursor: pointer; margin-left: 16px;" title="Add to Favourites">
+                            <svg width="26" height="26" fill="#eb6650" viewBox="0 0 24 24">
+                    </h2>
+                    <p style="color: #444; font-size: 1.1rem; margin-bottom: 18px; display: flex; align-items: center;">
+                        <span style="vertical-align: middle; margin-right: 6px; display: flex; align-items: center;">
+                            <svg width="20" height="20" fill="#888" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        </span>
+                        ${property.description}
+                    </p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 18px;">
+                        <div style="display: flex; align-items: center;">
+                            <span style="font-weight: 600; color: #222; display: flex; align-items: center;">
+                                <svg width="18" height="18" fill="#eb6650" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 17.93V20h-2v-.07A8.001 8.001 0 014.07 13H4v-2h.07A8.001 8.001 0 0111 4.07V4h2v.07A8.001 8.001 0 0119.93 11H20v2h-.07A8.001 8.001 0 0113 19.93z"/></svg>
+                                Status:
+                            </span>
+                            <span style="color: #eb6650; margin-left: 4px;">${property.status}</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <span style="font-weight: 600; color: #222; display: flex; align-items: center;">
+                                <svg width="18" height="18" fill="#eb6650" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M12 7V3L2 12h3v8h6v-6h2v6h6v-8h3z"/></svg>
+                                Type:
+                            </span>
+                            <span style="margin-left: 4px;">${property.type}</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <span style="font-weight: 600; color: #222; display: flex; align-items: center;">
+                                <svg width="18" height="18" fill="#eb6650" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M3 21v-2h18v2H3zm0-4v-2h18v2H3zm0-4V7h18v6H3zm2-2h14V9H5v2z"/></svg>
+                                Size:
+                            </span>
+                            <span style="margin-left: 4px;">${property.area} ${property.areaUnit}</span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 18px; >
+                        
+                            <svg width="18" height="18" fill="#eb6650" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 119.5 9 2.5 2.5 0 0112 11.5z"/></svg>
+                            Location:                     
+                            ${property.location.country}, ${property.location.state}, ${property.location.city}, ${property.location.street}
+                            <span style="font-size: 0.95rem; color: #888;">Zipcode: ${property.location.zipCode}</span>
+                    </div>
+                    <div style="display: flex; gap: 32px; margin-bottom: 18px;">
+                        <span title="Bedrooms" style="font-weight: 600; display: flex; align-items: center;">
+                            <svg width="18" height="18" fill="#eb6650" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M21 10.78V8a2 2 0 00-2-2H5a2 2 0 00-2 2v2.78A2 2 0 003 13v7h2v-2h14v2h2v-7a2 2 0 00-1-2.22zM5 8h14v2H5V8zm14 7H5v-2h14v2z"/></svg>
+                            ${property.bedrooms} Bedrooms
+                        </span>
+                        <span title="Bathrooms" style="font-weight: 600; display: flex; align-items: center;">
+                            <svg width="18" height="18" fill="#eb6650" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M7 22a2 2 0 002-2h6a2 2 0 002 2h2v-2a2 2 0 00-2-2h-1V7a5 5 0 00-10 0v11H5a2 2 0 00-2 2v2h2zm2-15a3 3 0 016 0v11H9V7z"/></svg>
+                            ${property.bathrooms} Bathrooms
+                        </span>
+                        <span title="Floors" style="font-weight: 600; display: flex; align-items: center;">
+                            <svg width="18" height="18" fill="#eb6650" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 8h2v-2H7v2zm0-4h2v-2H7v2zm0-4h2V7H7v2zm4 8h2v-2h-2v2zm0-4h2v-2h-2v2zm0-4h2V7h-2v2zm4 8h2v-2h-2v2zm0-4h2v-2h-2v2zm0-4h2V7h-2v2z"/></svg>
+                            ${property.floors} Floors
+                        </span>
+                    </div>
+                    <div style="margin-bottom: 18px; display: flex; align-items: center;">
+                        <span style="font-weight: 600; color: #222; display: flex; align-items: center;">
+                            <svg width="18" height="18" fill="#eb6650" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            Amenities:
+                        </span>
+                        <span style="color: #555; margin-left: 4px;">${amenitiesText}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+                        <p style="font-size: 1.3rem; font-weight: 700; color: #eb6650; margin: 0; display: flex; align-items: center;">
+                            <svg width="22" height="22" fill="#eb6650" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm0 20c-4.963 0-9-4.037-9-9s4.037-9 9-9 9 4.037 9 9-4.037 9-9 9zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                            ${property.price} ${property.currency}
+                        </p>
+<a href="cart.html" style="color: #ccc; text-decoration: none;">                         <button onclick="addToCart(${property.id})"style="background: #eb6650; color: #fff; border: none; border-radius: 8px; padding: 12px 28px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 2px 8px rgba(235,102,80,0.12); transition: background 0.2s; display: flex; align-items: center;">
+                            <svg width="18" height="18" fill="#fff" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M7 18c-1.104 0-2-.896-2-2s.896-2 2-2 2 .896 2 2-.896 2-2 2zm10 0c-1.104 0-2-.896-2-2s.896-2 2-2 2 .896 2 2-.896 2-2 2zM7.16 14l.84-2h8.24l.84 2H7.16zm10.24-4H6.6l-1.2-3h13.2l-1.2 3z"/></svg>
+                            Add to Cart
+                        </button>
+
+                        </a>
+                    </div>
+                `;
+                document.getElementsByTagName("section")[0].appendChild(dis);
+
+            })
+    </script>
+    <nav id="navbar">
+        <h4>
+            Elfajar Estates
+        </h4>
+        <ul>
+            <li><a href="index.html">home</a></li>
+            <li><a href="products.html">properties</a></li>
+            <li><a href="contact.html">contact us</a></li>
+            <li><a class="active" href="cart.html">
+
+                    cart
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px"
+                        fill="#FFFFFF">
+                        <path
+                            d="M284.53-80.67q-30.86 0-52.7-21.97Q210-124.62 210-155.47q0-30.86 21.98-52.7Q253.95-230 284.81-230t52.69 21.98q21.83 21.97 21.83 52.83t-21.97 52.69q-21.98 21.83-52.83 21.83Zm400 0q-30.86 0-52.7-21.97Q610-124.62 610-155.47q0-30.86 21.98-52.7Q653.95-230 684.81-230t52.69 21.98q21.83 21.97 21.83 52.83t-21.97 52.69q-21.98 21.83-52.83 21.83ZM238.67-734 344-515.33h285.33l120-218.67H238.67ZM206-800.67h589.38q22.98 0 34.97 20.84 11.98 20.83.32 41.83L693.33-490.67q-11 19.34-28.87 30.67-17.87 11.33-39.13 11.33H324l-52 96h487.33V-286H278q-43 0-63-31.83-20-31.84-.33-68.17l60.66-111.33-149.33-316H47.33V-880h121.34L206-800.67Zm138 285.34h285.33H344Z" />
+                    </svg>
+                </a></li>
+                  <li>
+                    <a class="active" href="favourites.html">
+                        favourites
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="#FFFFFF">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </a>
+                </li>
+                 <li>
+                <a href="login.html"
+                    style="background-color: #222; border: 2px solid #eb6650; color: #eb6650; padding: 8px 22px; border-radius: 6px; font-weight: 600; margin-left: 18px; transition: background 0.2s, color 0.2s;">
+                    Login/Register
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <main style="display: flex;flex-direction: column; width: 80%;margin: auto;" id="d">
+        <div id="p"
+            style="width: 90%; background-color: #ffffff; padding-top: 20px;display: flex;gap: 20px;justify-content: center;padding-left: 120px;">
+
+        </div>
+    </main>
+    <section>
+
+    </section>
+    <footer style="width: 100%; background-color: #222; color: #fff; padding: 40px 0 20px 0; margin-top: 40px;">
+        <div
+            style="max-width: 1050px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;">
+            <div style="flex: 1; min-width: 220px; margin-bottom: 20px;">
+                <h4 style="color: #eb6650;">Elfajar Estates</h4>
+                <p style="font-size: 15px; color: #ccc;">Your trusted partner for quality properties and effortless
+                    rentals. Find your dream home with us today.</p>
+            </div>
+            <div style="flex: 1; min-width: 180px; margin-bottom: 20px;">
+                <h5 style="color: #eb6650;">Quick Links</h5>
+                <ul style="list-style: none; padding: 0; color: #ccc;">
+                    <li><a href="index.html" style="color: #ccc; text-decoration: none;">Home</a></li>
+                    <li><a href="products.html" style="color: #ccc; text-decoration: none;">Properties</a></li>
+                    <li><a href="contact.html" style="color: #ccc; text-decoration: none;">Contact Us</a></li>
+                    <li><a href="cart.html" style="color: #ccc; text-decoration: none;">Cart</a></li>
+                </ul>
+            </div>
+            <div style="flex: 1; min-width: 220px; margin-bottom: 20px;">
+                <h5 style="color: #eb6650;">Contact</h5>
+                <p style="font-size: 15px; color: #ccc; margin-bottom: 8px;">123 Main Street, City, Country</p>
+                <p style="font-size: 15px; color: #ccc; margin-bottom: 8px;">Phone: (123) 456-7890</p>
+                <p style="font-size: 15px; color: #ccc;">Email: info@elfajarestates.com</p>
+            </div>
+        </div>
+        <div style="text-align: center; color: #888; font-size: 14px; margin-top: 30px;">
+            &copy; 2025 Elfajar Estates. All rights reserved.
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+
+</html>

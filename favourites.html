@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elfajar Estates</title>  
+    <link rel="stylesheet" href="style.css">  
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <nav id="navbar">
+        <h4>
+            Elfajar Estates
+        </h4>
+        <ul>
+            <li><a   href="index.html">home</a></li>
+            <li><a href="products.html">properties</a></li>
+            <li><a href="contact.html">contact us</a></li>
+            <li><a href="cart.html">
+
+                    cart
+                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M284.53-80.67q-30.86 0-52.7-21.97Q210-124.62 210-155.47q0-30.86 21.98-52.7Q253.95-230 284.81-230t52.69 21.98q21.83 21.97 21.83 52.83t-21.97 52.69q-21.98 21.83-52.83 21.83Zm400 0q-30.86 0-52.7-21.97Q610-124.62 610-155.47q0-30.86 21.98-52.7Q653.95-230 684.81-230t52.69 21.98q21.83 21.97 21.83 52.83t-21.97 52.69q-21.98 21.83-52.83 21.83ZM238.67-734 344-515.33h285.33l120-218.67H238.67ZM206-800.67h589.38q22.98 0 34.97 20.84 11.98 20.83.32 41.83L693.33-490.67q-11 19.34-28.87 30.67-17.87 11.33-39.13 11.33H324l-52 96h487.33V-286H278q-43 0-63-31.83-20-31.84-.33-68.17l60.66-111.33-149.33-316H47.33V-880h121.34L206-800.67Zm138 285.34h285.33H344Z"/></svg>
+                </a></li>
+                  <li>
+                    <a href="favourites.html" style="color: #eb6650;"">
+                        favourites
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px">
+                            <path fill="#eb6650" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </a>
+                </li>
+                 <li>
+                <a href="login.html"
+                    style="background-color: #222; border: 2px solid #eb6650; color: #eb6650; padding: 8px 22px; border-radius: 6px; font-weight: 600; margin-left: 18px; transition: background 0.2s, color 0.2s;">
+                    Login/Register
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <main style="max-width: 1050px; margin: 40px auto 0 auto; padding: 0 16px;">
+        <h2 style="color: #eb6650; margin-bottom: 24px;">Your Favourite Properties</h2>
+        <div id="favourites-list" style="display: flex; flex-wrap: wrap; gap: 24px;">
+            <!-- Favourite properties will be loaded here -->
+        </div>
+        <div id="no-favourites" style="display: none; color: #888; font-size: 18px; margin-top: 32px;">
+            You have no favourite properties yet.
+        </div>
+    </main>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const favouritesList = document.getElementById('favourites-list');
+    const noFavourites = document.getElementById('no-favourites');
+    let favouriteIds = [];
+    try {
+        // Use the same key as in your script.js: "favourite"
+        favouriteIds = JSON.parse(localStorage.getItem('favourite')) || [];
+    } catch (e) {
+        favouriteIds = [];
+    }
+
+    // Fetch property data from API
+    fetch('https://edu-me01.github.io/Json-Data/Real-state.json')
+        .then(res => res.json())
+        .then(data => {
+            const allProperties = data.properties || [];
+            // Filter properties that are in favourites
+            const favourites = allProperties.filter(p => favouriteIds.includes(p.id));
+            renderFavourites(favourites);
+        });
+
+    function renderFavourites(favourites) {
+        favouritesList.innerHTML = '';
+        if (favourites.length === 0) {
+            noFavourites.style.display = 'block';
+            return;
+        }
+        noFavourites.style.display = 'none';
+        favourites.forEach(property => {
+            const card = document.createElement('div');
+            card.style = "background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); width: 300px; overflow: hidden; display: flex; flex-direction: column;";
+            card.innerHTML = `
+                <img src="${property.mainImage || 'https://img.freepik.com/premium-vector/home-icon-vector_564384-123.jpg'}" alt="${property.title}" style="width:100%; height:180px; object-fit:cover;">
+                <div style="padding: 16px;">
+                    <h3 style="margin: 0 0 10px 0; color: #eb6650;">${property.title || 'Property Title'}</h3>
+                    <p style="margin: 0 0 8px 0; color: #666;">${property.location && property.location.city ? property.location.city : ''}</p>
+                    <p style="margin: 0 0 12px 0; color: #eb6650; font-weight: 600;">${property.price ? 'EGP ' + property.price : ''}</p>
+                    <button onclick="relaod()" type="button" class="remove-fav-btn" data-id="${property.id}" style="background: #eb6650; color: #fff; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Remove</button>
+                </div>
+            `;
+            favouritesList.appendChild(card);
+        });
+    }
+    
+
+    favouritesList.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-fav-btn')) {
+            const id = Number(e.target.getAttribute('data-id'));
+            // Remove from localStorage
+            let favs = JSON.parse(localStorage.getItem('favourite')) || [];
+            favs = favs.filter(itemId => itemId !== id);
+            localStorage.setItem('favourite', JSON.stringify(favs));
+            // Remove card from DOM
+            e.target.closest('div').remove();
+            // If no more favourites, show message
+            if (favs.length === 0) {
+                noFavourites.style.display = 'block';
+            }
+        }
+    });
+});
+
+function relaod() {
+    location.reload();
+}
+</script>
+    
+  <footer style="width: 100%; background-color: #222; color: #fff; padding: 40px 0 20px 0; margin-top: 40px;">
+        <div style="max-width: 1050px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;">
+            <div style="flex: 1; min-width: 220px; margin-bottom: 20px;">
+                <h4 style="color: #eb6650;">Elfajar Estates</h4>
+                <p style="font-size: 15px; color: #ccc;">Your trusted partner for quality properties and effortless rentals. Find your dream home with us today.</p>
+            </div>
+            <div style="flex: 1; min-width: 180px; margin-bottom: 20px;">
+                <h5 style="color: #eb6650;">Quick Links</h5>
+                <ul style="list-style: none; padding: 0; color: #ccc;">
+                    <li><a href="index.html" style="color: #ccc; text-decoration: none;">Home</a></li>
+                    <li><a href="products.html" style="color: #ccc; text-decoration: none;">Properties</a></li>
+                    <li><a href="contact.html" style="color: #ccc; text-decoration: none;">Contact Us</a></li>
+                    <li><a href="cart.html" style="color: #ccc; text-decoration: none;">Cart</a></li>
+                </ul>
+            </div>
+            <div style="flex: 1; min-width: 220px; margin-bottom: 20px;">
+                <h5 style="color: #eb6650;">Contact</h5>
+                <p style="font-size: 15px; color: #ccc; margin-bottom: 8px;">123 Main Street, City, Country</p>
+                <p style="font-size: 15px; color: #ccc; margin-bottom: 8px;">Phone: (123) 456-7890</p>
+                <p style="font-size: 15px; color: #ccc;">Email: info@elfajarestates.com</p>
+            </div>
+        </div>
+        <div style="text-align: center; color: #888; font-size: 14px; margin-top: 30px;">
+            &copy; 2025 Elfajar Estates. All rights reserved.
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
