@@ -12,10 +12,9 @@ async function loadProperties() {
 }
 
 loadProperties().then((properties) => {
-  if (!properties) return; // Prevent errors if fetch fails
+  if (!properties) return; 
 
   const wrapper = document.getElementsByClassName("swiper-wrapper")[0];
-  // Only loop through available properties
   for (let i = 0; i < properties.length-1; i++) {
    if(i==3||i==5||i==8){
    continue;
@@ -24,12 +23,11 @@ loadProperties().then((properties) => {
     wrapper.innerHTML += `<div class="swiper-slide"><img src="${s.images[0]} style="width=100%"></div>`;
   }
 
-  // Initialize Swiper AFTER slides are added
 const swiper = new Swiper(".swiper", {
     loop: true,
     autoplay: {
-        delay: 3000, // 3 seconds between slides
-        disableOnInteraction: false, // keep autoplay after user interaction
+        delay: 3000, 
+        disableOnInteraction: false, 
     },
     pagination: {
         el: ".swiper-pagination",
@@ -80,7 +78,6 @@ card.innerHTML = `
     </div>
 `;
 
-// Add this function after your other functions (only once in your script)
 window.showAddToCartAlert = function(id) {
     addToCart(id);
     if (typeof Swal !== "undefined") {
@@ -105,19 +102,15 @@ function details(i) {
     window.location.href = "details.html";
 }
 
-// Add this function to handle the favorite icon toggle
 function toggleFavourite(btn, id) {
-    // Get current favourites from localStorage or initialize as empty array
     let favourites = JSON.parse(localStorage.getItem("favourite")) || [];
     const index = favourites.indexOf(id);
 
     if (index !== -1) {
-        // Remove from favourites
         favourites.splice(index, 1);
         btn.style.color = "#bbb";
         btn.title = "Add to Favourites";
     } else {
-        // Add to favourites
         favourites.push(id);
         btn.style.color = "#eb6650";
         btn.title = "Remove from Favourites";
@@ -126,16 +119,13 @@ function toggleFavourite(btn, id) {
 }
 
 function addToCart(id) {
-    // Get current cart from localStorage or initialize as empty array
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     if (!cart.includes(id)) {
         cart.push(id);
         localStorage.setItem("cart", JSON.stringify(cart));
     }
 }
-// Select the <a> with href="login.html" and a specific style
-// Make sure SweetAlert2 is loaded in your HTML before this script:
-// <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 const loginBtn = document.querySelector('nav ul li a[href="login.html"][style*="border: 2px solid #eb6650"]');
 let flag=localStorage.getItem("isLoggedIn");
 let fullname = localStorage.getItem("fullname");
@@ -159,10 +149,8 @@ if (flag === "true") {
                         localStorage.removeItem("isLoggedIn");
                         window.location.href = "login.html";
                     }
-                    // If cancelled, do nothing (stay on page)
                 });
             } else {
-                // Fallback if SweetAlert2 is not loaded
                 if (confirm("Do you want to log out?")) {
                     localStorage.removeItem("isLoggedIn");
                     window.location.href = "login.html";
