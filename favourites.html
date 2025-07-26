@@ -41,8 +41,7 @@
     <main style="max-width: 1050px; margin: 40px auto 0 auto; padding: 0 16px;">
         <h2 style="color: #eb6650; margin-bottom: 24px;">Your Favourite Properties</h2>
         <div id="favourites-list" style="display: flex; flex-wrap: wrap; gap: 24px;">
-            <!-- Favourite properties will be loaded here -->
-        </div>
+         </div>
         <div id="no-favourites" style="display: none; color: #888; font-size: 18px; margin-top: 32px;">
             You have no favourite properties yet.
         </div>
@@ -53,19 +52,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const noFavourites = document.getElementById('no-favourites');
     let favouriteIds = [];
     try {
-        // Use the same key as in your script.js: "favourite"
-        favouriteIds = JSON.parse(localStorage.getItem('favourite')) || [];
+         favouriteIds = JSON.parse(localStorage.getItem('favourite')) || [];
     } catch (e) {
         favouriteIds = [];
     }
 
-    // Fetch property data from API
-    fetch('https://edu-me01.github.io/Json-Data/Real-state.json')
+     fetch('https://edu-me01.github.io/Json-Data/Real-state.json')
         .then(res => res.json())
         .then(data => {
             const allProperties = data.properties || [];
-            // Filter properties that are in favourites
-            const favourites = allProperties.filter(p => favouriteIds.includes(p.id));
+             const favourites = allProperties.filter(p => favouriteIds.includes(p.id));
             renderFavourites(favourites);
         });
 
@@ -96,14 +92,11 @@ document.addEventListener('DOMContentLoaded', function() {
     favouritesList.addEventListener('click', function(e) {
         if (e.target.classList.contains('remove-fav-btn')) {
             const id = Number(e.target.getAttribute('data-id'));
-            // Remove from localStorage
-            let favs = JSON.parse(localStorage.getItem('favourite')) || [];
+             let favs = JSON.parse(localStorage.getItem('favourite')) || [];
             favs = favs.filter(itemId => itemId !== id);
             localStorage.setItem('favourite', JSON.stringify(favs));
-            // Remove card from DOM
-            e.target.closest('div').remove();
-            // If no more favourites, show message
-            if (favs.length === 0) {
+             e.target.closest('div').remove();
+             if (favs.length === 0) {
                 noFavourites.style.display = 'block';
             }
         }
